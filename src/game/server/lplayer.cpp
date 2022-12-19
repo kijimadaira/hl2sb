@@ -183,7 +183,7 @@ static int CBasePlayer_Event_KilledOther (lua_State *L) {
 }
 
 static int CBasePlayer_Event_Dying (lua_State *L) {
-  luaL_checkplayer(L, 1)->Event_Dying();
+  luaL_checkplayer(L, 1)->Event_Dying(luaL_checkdamageinfo(L, 2));
   return 0;
 }
 
@@ -262,8 +262,8 @@ static int CBasePlayer_Weapon_DropSlot (lua_State *L) {
   return 0;
 }
 
-static int CBasePlayer_Weapon_GetLast (lua_State *L) {
-  lua_pushweapon(L, luaL_checkplayer(L, 1)->Weapon_GetLast());
+static int CBasePlayer_GetLastWeapon (lua_State *L) {
+  lua_pushweapon(L, luaL_checkplayer(L, 1)->GetLastWeapon());
   return 1;
 }
 
@@ -544,7 +544,7 @@ static const luaL_Reg CBasePlayermeta[] = {
   {"Weapon_Equip", CBasePlayer_Weapon_Equip},
   {"Weapon_Drop", CBasePlayer_Weapon_Drop},
   {"Weapon_DropSlot", CBasePlayer_Weapon_DropSlot},
-  {"Weapon_GetLast", CBasePlayer_Weapon_GetLast},
+  {"GetLastWeapon", CBasePlayer_GetLastWeapon},
   {"HasAnyAmmoOfType", CBasePlayer_HasAnyAmmoOfType},
   {"RumbleEffect", CBasePlayer_RumbleEffect},
   {"IsOnLadder", CBasePlayer_IsOnLadder},

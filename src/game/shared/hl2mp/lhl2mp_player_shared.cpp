@@ -114,36 +114,11 @@ static int CHL2MP_Player___index (lua_State *L) {
 	return lua_error(L);
   }
   const char *field = luaL_checkstring(L, 2);
-#ifdef CLIENT_DLL
-  if (Q_strcmp(field, "m_fNextThinkPushAway") == 0)
-    lua_pushnumber(L, pPlayer->m_fNextThinkPushAway);
-  else {
-#endif
-    if (pPlayer->m_nTableReference != LUA_NOREF) {
-      lua_getref(L, pPlayer->m_nTableReference);
-      lua_getfield(L, -1, field);
-      if (lua_isnil(L, -1)) {
-        lua_pop(L, 2);
-        lua_getmetatable(L, 1);
-        lua_getfield(L, -1, field);
-        if (lua_isnil(L, -1)) {
-          lua_pop(L, 2);
-          luaL_getmetatable(L, "CBasePlayer");
-          lua_getfield(L, -1, field);
-          if (lua_isnil(L, -1)) {
-            lua_pop(L, 2);
-            luaL_getmetatable(L, "CBaseAnimating");
-            lua_getfield(L, -1, field);
-            if (lua_isnil(L, -1)) {
-              lua_pop(L, 2);
-              luaL_getmetatable(L, "CBaseEntity");
-              lua_getfield(L, -1, field);
-            }
-          }
-        }
-      }
-    }
-    else {
+  if (pPlayer->m_nTableReference != LUA_NOREF) {
+    lua_getref(L, pPlayer->m_nTableReference);
+    lua_getfield(L, -1, field);
+    if (lua_isnil(L, -1)) {
+      lua_pop(L, 2);
       lua_getmetatable(L, 1);
       lua_getfield(L, -1, field);
       if (lua_isnil(L, -1)) {
@@ -162,9 +137,26 @@ static int CHL2MP_Player___index (lua_State *L) {
         }
       }
     }
-#ifdef CLIENT_DLL
   }
-#endif
+  else {
+    lua_getmetatable(L, 1);
+    lua_getfield(L, -1, field);
+    if (lua_isnil(L, -1)) {
+      lua_pop(L, 2);
+      luaL_getmetatable(L, "CBasePlayer");
+      lua_getfield(L, -1, field);
+      if (lua_isnil(L, -1)) {
+        lua_pop(L, 2);
+        luaL_getmetatable(L, "CBaseAnimating");
+        lua_getfield(L, -1, field);
+        if (lua_isnil(L, -1)) {
+          lua_pop(L, 2);
+          luaL_getmetatable(L, "CBaseEntity");
+          lua_getfield(L, -1, field);
+        }
+      }
+    }
+  }
   return 1;
 }
 
@@ -180,22 +172,14 @@ static int CHL2MP_Player___newindex (lua_State *L) {
 	return lua_error(L);
   }
   const char *field = luaL_checkstring(L, 2);
-#ifdef CLIENT_DLL
-  if (Q_strcmp(field, "m_fNextThinkPushAway") == 0)
-    pPlayer->m_fNextThinkPushAway = luaL_checknumber(L, 3);
-  else {
-#endif
-    if (pPlayer->m_nTableReference == LUA_NOREF) {
-      lua_newtable(L);
-      pPlayer->m_nTableReference = luaL_ref(L, LUA_REGISTRYINDEX);
-    }
-    lua_getref(L, pPlayer->m_nTableReference);
-    lua_pushvalue(L, 3);
-    lua_setfield(L, -2, field);
-	lua_pop(L, 1);
-#ifdef CLIENT_DLL
+  if (pPlayer->m_nTableReference == LUA_NOREF) {
+    lua_newtable(L);
+    pPlayer->m_nTableReference = luaL_ref(L, LUA_REGISTRYINDEX);
   }
-#endif
+  lua_getref(L, pPlayer->m_nTableReference);
+  lua_pushvalue(L, 3);
+  lua_setfield(L, -2, field);
+  lua_pop(L, 1);
   return 0;
 }
 

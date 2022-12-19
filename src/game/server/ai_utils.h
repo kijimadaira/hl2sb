@@ -23,21 +23,7 @@
 
 inline CBasePlayer *AI_GetSinglePlayer()
 {
-#ifdef HL2SB
-	CBasePlayer *pHostPlayer = UTIL_GetListenServerHost();
-	if ( pHostPlayer != NULL )
-		return pHostPlayer;
-
-	for( int iClient = 1; iClient <= gpGlobals->maxClients; ++iClient )
-	{
-		CBasePlayer *pEnt = UTIL_PlayerByIndex( iClient );
-		if(!pEnt || !pEnt->IsPlayer())
-			continue;
-
-		// Return the first player we can get a hold of.
-		return pEnt;
-	}
-#else
+#ifndef HL2SB
 	if ( gpGlobals->maxClients > 1 )
 	{
 		return NULL;

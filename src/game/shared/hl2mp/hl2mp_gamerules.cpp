@@ -367,16 +367,19 @@ void CHL2MPRules::PlayerKilled( CBasePlayer *pVictim, const CTakeDamageInfo &inf
 
 #ifndef CLIENT_DLL
 #if defined ( LUA_SDK )
-bool CHL2MPRules::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAttacker )
+bool CHL2MPRules::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAttacker, const CTakeDamageInfo &info )
 {
+	CTakeDamageInfo lInfo = info;
+
 	BEGIN_LUA_CALL_HOOK( "FPlayerCanTakeDamage" );
 		lua_pushplayer( L, pPlayer );
 		lua_pushentity( L, pAttacker );
+		lua_pushdamageinfo( L, lInfo );
 	END_LUA_CALL_HOOK( 2, 1 );
 
 	RETURN_LUA_BOOLEAN();
 
-	return BaseClass::FPlayerCanTakeDamage( pPlayer, pAttacker );
+	return BaseClass::FPlayerCanTakeDamage( pPlayer, pAttacker, lInfo );
 }
 
 bool CHL2MPRules::AllowDamage( CBaseEntity *pVictim, const CTakeDamageInfo &info )

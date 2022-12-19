@@ -18,7 +18,7 @@
 #include "luamanager.h"
 #include "vgui_int.h"
 #include "lPanel.h"
-#include <scripted_controls/lPanel.h>
+#include <scripted_controls/lua_panel.h>
 #include "lColor.h"
 
 using namespace vgui;

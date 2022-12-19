@@ -77,11 +77,6 @@ static int VMatrix_ApplyRotation (lua_State *L) {
   return 1;
 }
 
-static int VMatrix_As3x4 (lua_State *L) {
-  lua_pushmatrix(L, luaL_checkvmatrix(L, 1).As3x4());
-  return 1;
-}
-
 static int VMatrix_Base (lua_State *L) {
   lua_pushnumber(L, *luaL_checkvmatrix(L, 1).Base());
   return 1;
@@ -323,7 +318,6 @@ static int VMatrix___unm (lua_State *L) {
 
 static const luaL_Reg VMatrixmeta[] = {
   {"ApplyRotation", VMatrix_ApplyRotation},
-  {"As3x4", VMatrix_As3x4},
   {"Base", VMatrix_Base},
   {"CopyFrom3x4", VMatrix_CopyFrom3x4},
   {"GetBasisVectors", VMatrix_GetBasisVectors},

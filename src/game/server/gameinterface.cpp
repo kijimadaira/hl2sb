@@ -655,9 +655,6 @@ bool CServerGameDLL::DLLInit( CreateInterfaceFn appSystemFactory,
 
 	// Finally, load all of the player's addons.
 	MountAddons();
-
-	// Fixes the issue where the external ip is not matching the local ip.
-	PatchTicketValidation();
 #endif
 
 	// cache the globals
@@ -812,11 +809,6 @@ void CServerGameDLL::DLLShutdown( void )
 #endif
 	// reset (shutdown) the gamestatsupload connection
 	gamestatsuploader->InitConnection();
-#endif
-
-#ifdef HL2SB
-	//Andrew; fixes the "CNet Encrypt:0" issue in 2007-based mods.
-	SteamAPI_Shutdown();
 #endif
 
 #ifndef _X360
