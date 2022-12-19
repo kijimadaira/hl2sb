@@ -97,7 +97,6 @@
 
 #ifdef HL2SB
 #include "mountsteamcontent.h"
-#include "ticketfix.h"
 #endif
 #include "querycache.h"
 
