@@ -1,4 +1,4 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
+﻿//========= Copyright Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -40,4 +40,17 @@ int GetAlternateProportionalValueFromScaled( vgui::HScheme hScheme, int scaledVa
 
 //-----------------------------------------------------------------------------
 
+#ifdef HL2SB
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+void DrawRoundedBackground( Color bgColor, int wide, int tall );
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+void DrawRoundedBorder( Color borderColor, int wide, int tall );
+
+//-----------------------------------------------------------------------------
+#endif
 #endif // CSBACKGROUND_H

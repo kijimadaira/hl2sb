@@ -156,14 +156,49 @@ void CHL2MPPlayerAnimState::Update( float eyeYaw, float eyePitch )
 		ComputePoseParam_AimYaw( pStudioHdr );
 	}
 
+#ifndef HL2SB
 #ifdef CLIENT_DLL 
 	if ( C_BasePlayer::ShouldDrawLocalPlayer() )
 	{
 		m_pHL2MPPlayer->SetPlaybackRate( 1.0f );
 	}
 #endif
+#else
+	ComputePlaybackRate();
+#endif
 }
 
+#ifdef HL2SB
+
+void CHL2MPPlayerAnimState::ComputePlaybackRate()
+{
+	// Determine ideal playback rate
+	Vector vel;
+	GetOuterAbsVelocity( vel );
+
+	float speed = vel.Length2D();
+
+	bool isMoving = ( speed > 0.5f ) ? true : false;
+
+	float maxspeed = m_pHL2MPPlayer->GetSequenceGroundSpeed( m_pHL2MPPlayer->GetSequence() );
+	
+	if ( isMoving && ( maxspeed > 0.0f ) )
+	{
+		float flFactor = 1.0f;
+
+		// Note this gets set back to 1.0 if sequence changes due to ResetSequenceInfo below
+		m_pHL2MPPlayer->SetPlaybackRate( ( speed * flFactor ) / maxspeed );
+
+		// BUG BUG:
+		// This stuff really should be m_flPlaybackRate = speed / m_flGroundSpeed
+	}
+	else
+	{
+		m_pHL2MPPlayer->SetPlaybackRate( 1.0f );
+	}
+}
+
+#endif
 //-----------------------------------------------------------------------------
 // Purpose: 
 // Input  : event - 
@@ -538,8 +573,12 @@ void CHL2MPPlayerAnimState::ComputePoseParam_MoveYaw( CStudioHdr *pStudioHdr )
 	// view direction relative to movement
 	float flYaw;	 
 
+#ifndef HL2SB
 	QAngle	angles = GetBasePlayer()->GetLocalAngles();
 	float ang = angles[ YAW ];
+#else
+	float ang = m_flEyeYaw;
+#endif
 	if ( ang > 180.0f )
 	{
 		ang -= 360.0f;

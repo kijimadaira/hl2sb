@@ -39,6 +39,10 @@
 #include "decals.h"
 #include "cdll_bounded_cvars.h"
 #include "inetchannelinfo.h"
+#ifdef LUA_SDK
+#include "luamanager.h"
+#include "mathlib/lvector.h"
+#endif
 #include "proto_version.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -967,6 +971,10 @@ C_BaseEntity::C_BaseEntity() :
 #endif
 
 	ParticleProp()->Init( this );
+
+#if defined( LUA_SDK )
+	m_nTableReference = LUA_NOREF;
+#endif
 }
 
 
@@ -984,6 +992,9 @@ C_BaseEntity::~C_BaseEntity()
 #endif
 	RemoveFromInterpolationList();
 	RemoveFromTeleportList();
+#if defined( LUA_SDK )
+	lua_unref( L, m_nTableReference );
+#endif
 }
 
 void C_BaseEntity::Clear( void )
@@ -1627,11 +1638,43 @@ int C_BaseEntity::GetSoundSourceIndex() const
 //-----------------------------------------------------------------------------
 const Vector& C_BaseEntity::GetRenderOrigin( void )
 {
+#ifdef LUA_SDK
+	if ( m_nTableReference != LUA_NOREF )
+	{
+		lua_getref( L, m_nTableReference );
+		lua_getfield( L, -1, "m_vecRenderOrigin" );
+		lua_remove( L, -2 );
+		if ( lua_isuserdata( L, -1 ) && luaL_checkudata( L, -1, "Vector" ) )
+		{
+			const Vector& res = luaL_checkvector( L, -1 );
+			lua_pop( L, 1 );
+			return res;
+		}
+		lua_pop( L, 1 );
+	}
+#endif
+
 	return GetAbsOrigin();
 }
 
 const QAngle& C_BaseEntity::GetRenderAngles( void )
 {
+#ifdef LUA_SDK
+	if ( m_nTableReference != LUA_NOREF )
+	{
+		lua_getref( L, m_nTableReference );
+		lua_getfield( L, -1, "m_angRenderAngles" );
+		lua_remove( L, -2 );
+		if ( lua_isuserdata( L, -1 ) && luaL_checkudata( L, -1, "QAngle" ) )
+		{
+			const QAngle& res = luaL_checkangle( L, -1 );
+			lua_pop( L, 1 );
+			return res;
+		}
+		lua_pop( L, 1 );
+	}
+#endif
+
 	return GetAbsAngles();
 }
 
@@ -1706,7 +1749,9 @@ void C_BaseEntity::GetShadowRenderBounds( Vector &mins, Vector &maxs, ShadowType
 //-----------------------------------------------------------------------------
 const Vector& C_BaseEntity::GetAbsOrigin( void ) const
 {
-	//Assert( s_bAbsQueriesValid );
+#ifndef HL2SB
+	Assert( s_bAbsQueriesValid );
+#endif
 	const_cast<C_BaseEntity*>(this)->CalcAbsolutePosition();
 	return m_vecAbsOrigin;
 }
@@ -1718,7 +1763,9 @@ const Vector& C_BaseEntity::GetAbsOrigin( void ) const
 //-----------------------------------------------------------------------------
 const QAngle& C_BaseEntity::GetAbsAngles( void ) const
 {
-	//Assert( s_bAbsQueriesValid );
+#ifndef HL2SB
+	Assert( s_bAbsQueriesValid );
+#endif
 	const_cast<C_BaseEntity*>(this)->CalcAbsolutePosition();
 	return m_angAbsRotation;
 }
@@ -4764,6 +4811,13 @@ const char *C_BaseEntity::GetClassname( void )
 	static char outstr[ 256 ];
 	outstr[ 0 ] = 0;
 	bool gotname = false;
+#if defined ( LUA_SDK )
+	if ( m_iClassname && m_iClassname[ 0 ] )
+	{
+		Q_snprintf( outstr, sizeof( outstr ), "%s", m_iClassname );
+		gotname = true;
+	}
+#endif
 #ifndef NO_ENTITY_PREDICTION
 	if ( GetPredDescMap() )
 	{

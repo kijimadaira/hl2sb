@@ -49,6 +49,11 @@
 #include "ienginevgui.h"
 #include "iclientmode.h"
 
+// lua hooks
+#ifdef LUA_SDK
+#include "luamanager.h"
+#endif
+
 #include "tier0/etwprof.h"
 
 #if defined( REPLAY_ENABLED )
@@ -231,6 +236,16 @@ void CBaseViewport::OnScreenSizeChanged(int iOldWide, int iOldTall)
 	{
 		ShowPanel( PANEL_SPECGUI, true );
 	}
+
+#ifdef LUA_SDK
+	if ( g_bLuaInitialized )
+	{
+		BEGIN_LUA_CALL_HOOK( "OnScreenSizeChanged" );
+			lua_pushinteger( L, iOldWide );
+			lua_pushinteger( L, iOldTall );
+		END_LUA_CALL_HOOK( 2, 0 );
+	}
+#endif
 }
 
 void CBaseViewport::CreateDefaultPanels( void )
@@ -640,6 +655,10 @@ void CBaseViewport::SetParent(vgui::VPANEL parent)
 //-----------------------------------------------------------------------------
 void CBaseViewport::ActivateClientUI() 
 {
+#ifdef LUA_SDK
+	BEGIN_LUA_CALL_HOOK( "ActivateClientUI" );
+	END_LUA_CALL_HOOK( 0, 0 );
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -647,6 +666,10 @@ void CBaseViewport::ActivateClientUI()
 //-----------------------------------------------------------------------------
 void CBaseViewport::HideClientUI()
 {
+#ifdef LUA_SDK
+	BEGIN_LUA_CALL_HOOK( "HideClientUI" );
+	END_LUA_CALL_HOOK( 0, 0 );
+#endif
 }
 
 //-----------------------------------------------------------------------------

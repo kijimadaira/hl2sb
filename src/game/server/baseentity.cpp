@@ -61,6 +61,9 @@
 #include "ModelSoundsCache.h"
 #include "env_debughistory.h"
 #include "tier1/utlstring.h"
+#ifdef LUA_SDK
+#include "luamanager.h"
+#endif
 #include "utlhashtable.h"
 
 #if defined( TF_DLL )
@@ -415,6 +418,10 @@ CBaseEntity::CBaseEntity( bool bServerOnly )
 #ifndef _XBOX
 	AddEFlags( EFL_USE_PARTITION_WHEN_NOT_SOLID );
 #endif
+
+#if defined( LUA_SDK )
+	m_nTableReference = LUA_NOREF;
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -469,6 +476,10 @@ CBaseEntity::~CBaseEntity( )
 		// Remove this entity from the ent list (NOTE:  This Makes EHANDLES go NULL)
 		gEntList.RemoveEntity( GetRefEHandle() );
 	}
+
+#if defined( LUA_SDK )
+	lua_unref( L, m_nTableReference );
+#endif
 }
 
 void CBaseEntity::PostConstructor( const char *szClassname )
@@ -940,12 +951,20 @@ void CBaseEntity::DrawDebugGeometryOverlays(void)
 			NDebugOverlay::EntityBounds(this, 255, 255, 255, 0, 0 );
 		}
 	}
+#ifdef HL2SB
+	if ( m_debugOverlays & OVERLAY_AUTOAIM_BIT && (GetFlags()&FL_AIMTARGET) && AI_GetNearestPlayer( GetAbsOrigin() ) != NULL )
+#else
 	if ( m_debugOverlays & OVERLAY_AUTOAIM_BIT && (GetFlags()&FL_AIMTARGET) && AI_GetSinglePlayer() != NULL )
+#endif
 	{
 		// Crude, but it gets the point across.
 		Vector vecCenter = GetAutoAimCenter();
 		Vector vecRight, vecUp, vecDiag;
+#ifdef HL2SB
+		CBasePlayer *pPlayer = AI_GetNearestPlayer( GetAbsOrigin() );
+#else
 		CBasePlayer *pPlayer = AI_GetSinglePlayer();
+#endif
 		float radius = GetAutoAimRadius();
 
 		QAngle angles = pPlayer->EyeAngles();
@@ -6669,7 +6688,11 @@ void CBaseEntity::DispatchResponse( const char *conceptName )
 	ModifyOrAppendCriteria( set );
 
 	// Append local player criteria to set,too
+#ifdef HL2SB
+	CBasePlayer *pPlayer = UTIL_GetNearestPlayer( GetAbsOrigin() );
+#else
 	CBasePlayer *pPlayer = UTIL_GetLocalPlayer();
+#endif
 	if( pPlayer )
 		pPlayer->ModifyOrAppendPlayerCriteria( set );
 
@@ -6728,7 +6751,11 @@ void CBaseEntity::DumpResponseCriteria( void )
 	ModifyOrAppendCriteria( set );
 
 	// Append local player criteria to set,too
+#ifdef HL2SB
+	CBasePlayer *pPlayer = UTIL_GetNearestPlayer( GetAbsOrigin() );
+#else
 	CBasePlayer *pPlayer = UTIL_GetLocalPlayer();
+#endif
 	if ( pPlayer )
 	{
 		pPlayer->ModifyOrAppendPlayerCriteria( set );
@@ -7213,7 +7240,11 @@ bool CBaseEntity::SUB_AllowedToFade( void )
 
 	// on Xbox, allow these to fade out
 #ifndef _XBOX
+#ifdef HL2SB
+	CBasePlayer *pPlayer = UTIL_GetNearestPlayer( GetAbsOrigin() );
+#else
 	CBasePlayer *pPlayer = ( AI_IsSinglePlayer() ) ? UTIL_GetLocalPlayer() : NULL;
+#endif
 
 	if ( pPlayer && pPlayer->FInViewCone( this ) )
 		return false;
