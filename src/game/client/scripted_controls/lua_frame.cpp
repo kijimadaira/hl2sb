@@ -13,7 +13,7 @@
 #include <vgui_controls/lPanel.h>
 #include <LKeyValues.h>
 
-#include <scripted_controls/lFrame.h>
+#include <scripted_controls/lua_frame.h>
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include <tier0/memdbgon.h>

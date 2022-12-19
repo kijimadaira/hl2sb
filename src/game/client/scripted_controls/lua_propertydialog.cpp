@@ -11,7 +11,7 @@
 #include <luamanager.h>
 #include <vgui_controls/lPanel.h>
 
-#include <scripted_controls/lPropertyDialog.h>
+#include <scripted_controls/lua_propertydialog.h>
 #include <vgui_controls/PropertySheet.h>
 #include <vgui_controls/Button.h>
 
