@@ -13,7 +13,7 @@ local vgui = require( "vgui" )
 local Frame = vgui.Frame
 local Panel = vgui.Panel
 
-surface.AddCustomFontFile( "gamemodes\\sandbox\\content\\resource\\DINLi.ttf" )
+surface.AddCustomFontFile( "DIN-Light", "gamemodes\\sandbox\\content\\resource\\DINLi.ttf" )
 local hTestFont = surface.CreateFont()
 surface.SetFontGlyphSet( hTestFont,
                          "DIN-Light",
