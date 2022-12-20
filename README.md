@@ -12,7 +12,7 @@ Help is appreciated so please make a pull request.
 ### Contact
 Email: artifactofdissonance@gmail.com
 
-#Original README
+##Original README
 Half-Life 2: Sandbox is an open-source sandbox modification of the Source Engine which provides Lua as a scripting platform for developers to quickly prototype game ideas. The minimalistic game includes a sandbox gamemode for playing with the many aspects of the Source Engine.
 
 ### Proudly powered by
