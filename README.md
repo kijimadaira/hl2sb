@@ -1,5 +1,18 @@
-# hl2sb
+# Half-Life 2: Sandbox
+Half-Life 2: Sandbox ported to the Source SDK 2013 Engine.
 
+### Code used
+* [Valve's Source SDK 2013](https://github.com/valveSoftware/source-sdk-2013)
+* [Planimeter's Half-Life 2: Sandbox](https://github.com/planimeter/hl2sb-src)
+* [Tony Sergi's fork](https://github.com/tonysergi/source-sdk-2013)
+
+### Contributing
+Help is appreciated so please make a pull request.
+
+### Contact
+Email: artifactofdissonance@gmail.com
+
+#Original README
 Half-Life 2: Sandbox is an open-source sandbox modification of the Source Engine which provides Lua as a scripting platform for developers to quickly prototype game ideas. The minimalistic game includes a sandbox gamemode for playing with the many aspects of the Source Engine.
 
 ### Proudly powered by
