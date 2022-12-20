@@ -36,8 +36,7 @@ public:
 	// DECLARE_ACTTABLE();
 
 	acttable_t m_acttable[LUA_MAX_WEAPON_ACTIVITIES];
-	acttable_t *ActivityList( void );
-	int ActivityListCount( void );
+	acttable_t *ActivityList( int &iActivityCount );
 
 	void			Precache( void );
 	void			InitScriptedWeapon( void );

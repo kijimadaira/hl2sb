@@ -128,8 +128,9 @@ void ResetWeaponFactoryDatabase( void )
 
 // These functions serve as skeletons for the our weapons' actions to be
 // implemented in Lua.
-acttable_t *CHL2MPScriptedWeapon::ActivityList( void ) {
+acttable_t *CHL2MPScriptedWeapon::ActivityList( int &iActivityCount ) {
 #ifdef LUA_SDK
+	iActivityCount = LUA_MAX_WEAPON_ACTIVITIES;
 	lua_getref( L, m_nTableReference );
 	lua_getfield( L, -1, "m_acttable" );
 	lua_remove( L, -2 );
@@ -169,7 +170,6 @@ acttable_t *CHL2MPScriptedWeapon::ActivityList( void ) {
 #endif
 	return m_acttable;
 }
-int CHL2MPScriptedWeapon::ActivityListCount( void ) { return LUA_MAX_WEAPON_ACTIVITIES; }
 
 //-----------------------------------------------------------------------------
 // Purpose: 

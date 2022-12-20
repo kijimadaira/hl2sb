@@ -1,4 +1,4 @@
---========== Copyleft © 2010, Team Sandbox, Some rights reserved. ===========--
+--========== Copyleft Â© 2010, Team Sandbox, Some rights reserved. ===========--
 --
 -- Purpose: Initialize the base scripted weapon.
 --
@@ -39,19 +39,19 @@ SWEP.MeleeWeapon			= 0
 -- TODO; implement Activity enum library!!
 SWEP.m_acttable				=
 {
-	{ 1048, 977, false },
-	{ 1049, 979, false },
+	{ 1066, 995, false },
+	{ 1067, 997, false },
 
-	{ 1058, 978, false },
-	{ 1061, 980, false },
+	{ 1072, 996, false },
+	{ 1075, 998, false },
 
-	{ 1073, 981, false },
-	{ 1077, 981, false },
+	{ 1086, 999, false },
+	{ 1090, 999, false },
 
-	{ 1090, 982, false },
-	{ 1093, 982, false },
+	{ 1100, 1000, false },
+	{ 1103, 1000, false },
 
-	{ 1064, 983, false },
+	{ 1077, 1001, false },
 };
 
 function SWEP:Initialize()
