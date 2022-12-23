@@ -58,7 +58,7 @@ end
 function GM:FPlayerCanRespawn( pPlayer )
 end
 
-function GM:FPlayerCanTakeDamage( pPlayer, pAttacker )
+function GM:FPlayerCanTakeDamage( pPlayer, pAttacker, info )
 end
 
 function GM:FShouldSwitchWeapon( pPlayer, pWeapon )

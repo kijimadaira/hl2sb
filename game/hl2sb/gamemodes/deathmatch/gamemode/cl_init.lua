@@ -45,9 +45,6 @@ end
 function GM:OnScreenSizeChanged( iOldWide, iOldTall )
 end
 
-function GM:PlayerUpdateFlashlight( pHL2MPPlayer, position, vecForward, vecRight, vecUp, nDistance )
-end
-
 function GM:ShouldDrawCrosshair()
 end
 
